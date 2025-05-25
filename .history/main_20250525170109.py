@@ -660,7 +660,7 @@ def main(page: ft.Page):
             Dialog.title = ft.Text("武器を削除しました")
             Dialog.actions = [ft.TextButton("閉じる",on_click=close_dlg),]
             page.update()
-            cur.execute('DELETE FROM Weapon WHERE id = ?', (e.control.data[0],))
+            cur.execute('DELETE FROM Character WHERE id = ?', (e.control.data[0],))
             conn.commit()
             page.update()
         
@@ -689,7 +689,7 @@ def main(page: ft.Page):
                 border_color=ft.colors.AMBER,
                 border_width=2,
                 width=50,
-                value = str(e.control.data[3]),
+                value = str(e.control.data[2]),
                 adaptive=True,
             )
             Dialog.actions = [
@@ -739,7 +739,7 @@ def main(page: ft.Page):
                 on_click=delete_weapon,
                 data = data
             )
-            cells = [ft.DataCell(ft.Text(data[1])),ft.DataCell(ft.Text(data[2])),ft.DataCell(ft.Text(data[3])),ft.DataCell(editbutton), ft.DataCell(deletebutton)]
+            cells = [ft.DataCell(ft.Text(data[1])),ft.DataCell(ft.Text(data[2])),ft.DataCell(ft.Text(data[3])),ft.DataCell(ft.Text(data[4])),ft.DataCell(editbutton), ft.DataCell(deletebutton)]
             rows.append(ft.DataRow(cells=cells))
         header = [ft.DataColumn(ft.Text("武器")), ft.DataColumn(ft.Text("レベル")), ft.DataColumn(ft.Text("凸")), ft.DataColumn(ft.Text("編集")), ft.DataColumn(ft.Text("削除"))]
         data_table = ft.DataTable(columns=header, rows=rows)
@@ -759,13 +759,7 @@ def main(page: ft.Page):
                 ],
             ),
             controls=[
-                ft.Text("WeaponList", size=30),
-                updatebutton,
-                ft.Column(
-                    controls=[data_table],
-                    scroll=ft.ScrollMode.ALWAYS,
-                    expand=True
-                ),
+                ft.Text("This is Page 4", size=30),
             ],
         )
     

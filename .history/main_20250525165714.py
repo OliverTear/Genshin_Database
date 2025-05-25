@@ -647,35 +647,34 @@ def main(page: ft.Page):
             ],
             actions_alignment=ft.MainAxisAlignment.END,
         )
-        def delete_weapon(e):
-            Dialog.title = ft.Text("武器を削除します")
+        def delete_character(e):
+            Dialog.title = ft.Text("キャラクターを削除します")
             Dialog.actions = [
-                ft.TextButton("はい", on_click=delete_weapon_yes,data = e.control.data,),
+                ft.TextButton("はい", on_click=delete_character_yes,data = e.control.data,),
                 ft.TextButton("いいえ", on_click=close_dlg),
             ]
             page.open(Dialog)
             page.update()
         
-        def delete_weapon_yes(e):
-            Dialog.title = ft.Text("武器を削除しました")
+        def delete_character_yes(e):
+            Dialog.title = ft.Text("キャラクターを削除しました")
             Dialog.actions = [ft.TextButton("閉じる",on_click=close_dlg),]
             page.update()
-            cur.execute('DELETE FROM Weapon WHERE id = ?', (e.control.data[0],))
+            cur.execute('DELETE FROM Character WHERE id = ?', (e.control.data[0],))
             conn.commit()
             page.update()
         
-        def edit_weapon(e):
+        def edit_character(e):
             def edit_character_yes(e):
                 print(e.control.data)
-                Dialog.title = ft.Text("武器を編集しました")
+                Dialog.title = ft.Text("キャラクターを編集しました")
                 Dialog.actions = [ft.TextButton("閉じる",on_click=close_dlg),]
-                cur.execute('UPDATE Weapon SET level = ? WHERE id = ?', (editlevel.value, e.control.data[0],))
-                cur.execute('UPDATE Weapon SET talent = ? WHERE id = ?', (edittalent.value, e.control.data[0],))
+                cur.execute('UPDATE Character SET level = ? WHERE id = ?', (editlevel.value, e.control.data[0],))
                 conn.commit()
                 page.update()
-            Dialog.title = ft.Text("武器を編集します")
+            Dialog.title = ft.Text("キャラクターを編集します")
             editlevel = ft.TextField(
-                label="Lv",
+                label="レベル",
                 border_radius=10,
                 border_color=ft.colors.AMBER,
                 border_width=2,
@@ -683,22 +682,11 @@ def main(page: ft.Page):
                 value = str(e.control.data[2]),
                 adaptive=True,
             )
-            edittalent = ft.TextField(
-                label="凸",
-                border_radius=10,
-                border_color=ft.colors.AMBER,
-                border_width=2,
-                width=50,
-                value = str(e.control.data[3]),
-                adaptive=True,
-            )
             Dialog.actions = [
                 ft.Row(
                     [
                         ft.Text("Level"),
-                        editlevel,
-                        ft.Text("凸"),
-                        edittalent
+                        editlevel
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
@@ -730,18 +718,18 @@ def main(page: ft.Page):
             print(data)
             editbutton = ft.IconButton(
                 icon=ft.Icons.EDIT_SHARP,
-                on_click=edit_weapon,
+                on_click=edit_character,
                 data = data
                 
             )
             deletebutton = ft.IconButton(
                 icon=ft.Icons.DELETE_SHARP,
-                on_click=delete_weapon,
+                on_click=delete_character,
                 data = data
             )
-            cells = [ft.DataCell(ft.Text(data[1])),ft.DataCell(ft.Text(data[2])),ft.DataCell(ft.Text(data[3])),ft.DataCell(editbutton), ft.DataCell(deletebutton)]
+            cells = [ft.DataCell(ft.Text(data[1])),ft.DataCell(ft.Text(data[2])),ft.DataCell(ft.Text(data[3])),ft.DataCell(ft.Text(data[4])),ft.DataCell(editbutton), ft.DataCell(deletebutton)]
             rows.append(ft.DataRow(cells=cells))
-        header = [ft.DataColumn(ft.Text("武器")), ft.DataColumn(ft.Text("レベル")), ft.DataColumn(ft.Text("凸")), ft.DataColumn(ft.Text("編集")), ft.DataColumn(ft.Text("削除"))]
+        header = [ft.DataColumn(ft.Text("武器")), ft.DataColumn(ft.Text("レベル")), ft.DataColumn(ft.Text("武器")), ft.DataColumn(ft.Text("聖遺物")), ft.DataColumn(ft.Text("編集")), ft.DataColumn(ft.Text("削除"))]
         data_table = ft.DataTable(columns=header, rows=rows)
         return ft.View(
             "/list_weapon",
@@ -759,13 +747,7 @@ def main(page: ft.Page):
                 ],
             ),
             controls=[
-                ft.Text("WeaponList", size=30),
-                updatebutton,
-                ft.Column(
-                    controls=[data_table],
-                    scroll=ft.ScrollMode.ALWAYS,
-                    expand=True
-                ),
+                ft.Text("This is Page 4", size=30),
             ],
         )
     

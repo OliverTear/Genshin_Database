@@ -689,7 +689,7 @@ def main(page: ft.Page):
                 border_color=ft.colors.AMBER,
                 border_width=2,
                 width=50,
-                value = str(e.control.data[3]),
+                value = str(e.control.data[2]),
                 adaptive=True,
             )
             Dialog.actions = [

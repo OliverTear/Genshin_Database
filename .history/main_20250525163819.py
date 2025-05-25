@@ -450,18 +450,16 @@ def main(page: ft.Page):
 
         def register_weapon(e):
             weaponname = registertext.value
-            level = weaponlevel.value
-            talent = weapontalent.value
             if weaponname == "武器を選択してください":
                 page.open(Dialog)
                 Dialog.title=ft.Text("エラー")
                 Dialog.content = ft.Text("武器を選択してください")
                 page.update()
             else:
-                cur.execute('SELECT * FROM Weapon WHERE name LIKE "'+weaponname+'";')
+                cur.execute('SELECT * FROM WeaponList WHERE name LIKE "'+weaponname+'";')
                 if type(cur.fetchone()) == types.NoneType:
                     # 武器を登録する処理
-                    cur.execute('INSERT INTO Weapon(name,level,talent) VALUES(?, ?, ?)', (weaponname, level, talent))
+                    cur.execute('INSERT INTO Weapon(name) VALUES(?)', (registertext.value,))
                     conn.commit()
                     page.open(Dialog)
                     Dialog.title=ft.Text("登録完了")
@@ -533,12 +531,11 @@ def main(page: ft.Page):
             read_only=True,
         )
         weaponlevel = ft.TextField(
-            label="Lv",
+            label="レベル",
             border_radius=10,
             border_color=ft.colors.AMBER,
             border_width=2,
-            width=50,
-            value = "1",    
+            width=10,
         )
         weapontalent = ft.TextField(
             label="凸",
@@ -546,7 +543,6 @@ def main(page: ft.Page):
             border_color=ft.colors.AMBER,
             border_width=2,
             width=50,
-            value = "0",
         )
 
 
@@ -636,113 +632,7 @@ def main(page: ft.Page):
         )
 
     def list_weapon_view():
-        def close_dlg(e):
-                Dialog.open = False
-                Dialog.actions = [ft.TextButton("閉じる",on_click=close_dlg),]
-                page.update()
-        Dialog = ft.AlertDialog(
-            modal=True,
-            actions=[
-                ft.TextButton("閉じる",on_click=close_dlg),
-            ],
-            actions_alignment=ft.MainAxisAlignment.END,
-        )
-        def delete_weapon(e):
-            Dialog.title = ft.Text("武器を削除します")
-            Dialog.actions = [
-                ft.TextButton("はい", on_click=delete_weapon_yes,data = e.control.data,),
-                ft.TextButton("いいえ", on_click=close_dlg),
-            ]
-            page.open(Dialog)
-            page.update()
         
-        def delete_weapon_yes(e):
-            Dialog.title = ft.Text("武器を削除しました")
-            Dialog.actions = [ft.TextButton("閉じる",on_click=close_dlg),]
-            page.update()
-            cur.execute('DELETE FROM Weapon WHERE id = ?', (e.control.data[0],))
-            conn.commit()
-            page.update()
-        
-        def edit_weapon(e):
-            def edit_character_yes(e):
-                print(e.control.data)
-                Dialog.title = ft.Text("武器を編集しました")
-                Dialog.actions = [ft.TextButton("閉じる",on_click=close_dlg),]
-                cur.execute('UPDATE Weapon SET level = ? WHERE id = ?', (editlevel.value, e.control.data[0],))
-                cur.execute('UPDATE Weapon SET talent = ? WHERE id = ?', (edittalent.value, e.control.data[0],))
-                conn.commit()
-                page.update()
-            Dialog.title = ft.Text("武器を編集します")
-            editlevel = ft.TextField(
-                label="Lv",
-                border_radius=10,
-                border_color=ft.colors.AMBER,
-                border_width=2,
-                width=50,
-                value = str(e.control.data[2]),
-                adaptive=True,
-            )
-            edittalent = ft.TextField(
-                label="凸",
-                border_radius=10,
-                border_color=ft.colors.AMBER,
-                border_width=2,
-                width=50,
-                value = str(e.control.data[3]),
-                adaptive=True,
-            )
-            Dialog.actions = [
-                ft.Row(
-                    [
-                        ft.Text("Level"),
-                        editlevel,
-                        ft.Text("凸"),
-                        edittalent
-                    ],
-                    alignment=ft.MainAxisAlignment.CENTER,
-                ),
-                ft.Column([
-                ft.TextButton("変更する", on_click=edit_character_yes,data = e.control.data),
-                ft.TextButton("キャンセル", on_click=close_dlg),
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                ),
-
-            ]
-            page.open(Dialog)
-            page.update()
-        
-        updatebutton = ft.ElevatedButton(
-            text="更新",
-            icon=ft.Icons.REFRESH_SHARP,
-            on_click=lambda _: navigate_to("list_weapon"),
-        )
-
-        rows = []
-        cur.execute('SELECT * FROM Weapon')
-        weapondata = cur.fetchall()
-        for data in weapondata:
-            data = list(data)
-            for i in range(1, len(data)):
-                if type(data[i]) == types.NoneType:
-                    data[i] = "0"
-            print(data)
-            editbutton = ft.IconButton(
-                icon=ft.Icons.EDIT_SHARP,
-                on_click=edit_weapon,
-                data = data
-                
-            )
-            deletebutton = ft.IconButton(
-                icon=ft.Icons.DELETE_SHARP,
-                on_click=delete_weapon,
-                data = data
-            )
-            cells = [ft.DataCell(ft.Text(data[1])),ft.DataCell(ft.Text(data[2])),ft.DataCell(ft.Text(data[3])),ft.DataCell(editbutton), ft.DataCell(deletebutton)]
-            rows.append(ft.DataRow(cells=cells))
-        header = [ft.DataColumn(ft.Text("武器")), ft.DataColumn(ft.Text("レベル")), ft.DataColumn(ft.Text("凸")), ft.DataColumn(ft.Text("編集")), ft.DataColumn(ft.Text("削除"))]
-        data_table = ft.DataTable(columns=header, rows=rows)
         return ft.View(
             "/list_weapon",
             appbar=ft.AppBar(
@@ -759,13 +649,7 @@ def main(page: ft.Page):
                 ],
             ),
             controls=[
-                ft.Text("WeaponList", size=30),
-                updatebutton,
-                ft.Column(
-                    controls=[data_table],
-                    scroll=ft.ScrollMode.ALWAYS,
-                    expand=True
-                ),
+                ft.Text("This is Page 4", size=30),
             ],
         )
     

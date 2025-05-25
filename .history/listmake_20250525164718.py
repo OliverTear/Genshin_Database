@@ -10,7 +10,7 @@ cur = conn.cursor()
 #     cur.execute('INSERT INTO CharacterList(name) values("' + i + '")')
 # conn.commit()
 cur.execute('Drop table Weapon')
-cur.execute('CREATE TABLE IF NOT EXISTS Weapon(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING, level INT, talent INT, character STRING)')
+cur.execute('CREATE TABLE IF NOT EXISTS Weapon(name STRING, level INT, talent INT, character STRING)')
 
 cur.close()
 conn.close()
