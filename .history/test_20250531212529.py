@@ -50,4 +50,4 @@ numlist = np.array([0]*N)
 for i in range(M):
     a, b = map(int, input().split())
     numlist[a-1:b] += 1
-print(np.min(numlist))
+print(min(numlist))

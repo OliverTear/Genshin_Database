@@ -45,9 +45,3 @@
 # print(sqlitelist)
 
 import numpy as np
-N, M = map(int, input().split())
-numlist = np.array([0]*N)
-for i in range(M):
-    a, b = map(int, input().split())
-    numlist[a-1:b] += 1
-print(np.min(numlist))

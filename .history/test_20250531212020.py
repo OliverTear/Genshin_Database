@@ -43,11 +43,3 @@
 #         sqlitelist.append(f'INSERT INTO WeaponList(type, rarity, name, BASEATK, SubEffect, SubEffectValue, Support, Get) VALUES("{weapontype[0]}", {row[0]}, "{row[2]}", {row[3]}, "{row[4]}", "{row[5]}", {row[6]}, "{row[7]}")')
 #     weapontype.pop(0)
 # print(sqlitelist)
-
-import numpy as np
-N, M = map(int, input().split())
-numlist = np.array([0]*N)
-for i in range(M):
-    a, b = map(int, input().split())
-    numlist[a-1:b] += 1
-print(np.min(numlist))
